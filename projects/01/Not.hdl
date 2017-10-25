@@ -1,0 +1,24 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Not.hdl
+
+/**
+ * Not gate:
+ * out = not in
+ */
+
+CHIP Not {
+    IN in;
+    OUT out;
+
+    PARTS:
+    // Put your code here:
+}
+
+
+// PARTS:
+// Not(in=a, out=nota);
+//Not(in=b, out=notb);
+//And(a=a, b=notb, out=w1);
+//And(a=nota, b=b, out=w2);
