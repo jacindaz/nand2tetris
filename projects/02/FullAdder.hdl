@@ -16,6 +16,11 @@ CHIP FullAdder {
     // Put you code here:
 
     // Both OR and XOR work
+    // they both work because:
+    // => when you are "adding" the carry values
+    // => you will never get two 1's for the carry
+    // => which is when the Xor and Or truth tables differ
+
     // HalfAdder(a=a, b=b, sum=halfsum, carry=c1);
     // HalfAdder(a=halfsum, b=c, sum=sum, carry=c2);
     // Or(a=c1, b=c2, out=carry);
