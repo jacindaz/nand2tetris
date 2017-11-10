@@ -8,10 +8,18 @@
  * out = in + 1 (arithmetic addition)
  */
 
+/**
+  CHIP Add16 {
+    IN a[16], b[16];
+    OUT out[16];
+  }
+*/
+
+
 CHIP Inc16 {
     IN in[16];
     OUT out[16];
 
     PARTS:
-   // Put you code here:
+    Add16(a=in, b[0]=true, out=out);
 }
