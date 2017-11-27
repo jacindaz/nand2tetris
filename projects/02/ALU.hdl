@@ -39,59 +39,29 @@ CHIP ALU {
     OUT
         out[16], // 16-bit output
         zr, // 1 if (out == 0), 0 otherwise
-        ng; // 1 if (out < 0),  0 otherwise
+        ng, // 1 if (out < 0),  0 otherwise
+        nxResult[16],
+        nyResult[16];
 
     PARTS:
-    // if (zx == 1) set x = 0        // 16-bit constant
     Mux16(a=x, b=false, sel=zx, out=zxResult);
+    // => x: 1
+    // => zx: 0
+    // => zxResult: 1
 
-    // if (nx == 1) set x = !x       // bitwise not
-    // return !x when nx == 1
     Not16(in=zxResult, out=notX);
-    Mux16(a=x, b=notX, sel=nx, out=nxResult);
+    Mux16(a=zxResult, b=notX, sel=nx, out=nxResult);
+    // => zxResult: 1
+    // => notX: 0
+    // => nx: 1
+    // => nxResult: 0
 
-    // if (zy == 1) set y = 0        // 16-bit constant
+    //
     Mux16(a=y, b=false, sel=zy, out=zyResult);
+    // => y: 1111111111
+    // => zy: 1
+    // => zyResult: 0 (false)
 
-    // if (ny == 1) set y = !y       // bitwise not
     Not16(in=zyResult, out=notY);
-    Mux16(a=y, b=notY, sel=ny, out=nyResult);
-
-    // if (f == 1)  set out = x + y  // integer 2's complement addition
-    // if (f == 0)  set out = x & y  // bitwise and
-    Add16(a=nxResult, b=nyResult, out=addXY);
-    And16(a=nxResult, b=nyResult, out=andXY);
-    Mux16(a=andXY, b=addXY, sel=f, out=fResult);
-
-    // if (no == 1) set out = !out   // bitwise not
-    Not16(in=fResult, out=notfResult);
-    Mux16(a=fResult, b=notResult, sel=no, out=noResult);
-
-    // if (out == 0) set zr = 1 ====================================
-    Or16(a=false, b=noResult, out=orNoResult);
-
-    Or(a=orNoResult[0], b=orNoResult[1], out=or1);
-    Or(a=or1, b=orNoResult[2], out=or2);
-    Or(a=or2, b=orNoResult[3], out=or3);
-    Or(a=or3, b=orNoResult[4], out=or4);
-    Or(a=or4, b=orNoResult[5], out=or5);
-    Or(a=or5, b=orNoResult[6], out=or6);
-    Or(a=or6, b=orNoResult[7], out=or7);
-    Or(a=or7, b=orNoResult[8], out=or8);
-    Or(a=or8, b=orNoResult[9], out=or9);
-    Or(a=or9, b=orNoResult[10], out=or10);
-    Or(a=or10, b=orNoResult[11], out=or11);
-    Or(a=or11, b=orNoResult[12], out=or12);
-    Or(a=or12, b=orNoResult[13], out=or13);
-    Or(a=or13, b=orNoResult[14], out=or14);
-    Or(a=or14, b=orNoResult[15], out=or15);
-
-    Mux16(a=true, b=false, sel=or15, out=zr);
-
-
-    // if (out < 0) set ng = 1 ======================================
-
-    // UNCOMMENT HERE
-    // Mux(a=false, b=true, sel=s, out=ng);
-    Mux(a=true, b=false, sel=false, out=ng);
+    Mux16(a=zyResult, b=notY, sel=ny, out=nyResult);
 }
