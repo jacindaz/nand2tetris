@@ -39,29 +39,30 @@ CHIP ALU {
     OUT
         out[16], // 16-bit output
         zr, // 1 if (out == 0), 0 otherwise
-        ng, // 1 if (out < 0),  0 otherwise
-        nxResult[16],
-        nyResult[16];
+        ng; // 1 if (out < 0),  0 otherwise
+
 
     PARTS:
-    Mux16(a=x, b=false, sel=zx, out=zxResult);
-    // => x: 1
-    // => zx: 0
-    // => zxResult: 1
 
+    Mux16(a=x, b=false, sel=zx, out=zxResult);
     Not16(in=zxResult, out=notX);
     Mux16(a=zxResult, b=notX, sel=nx, out=nxResult);
-    // => zxResult: 1
-    // => notX: 0
-    // => nx: 1
-    // => nxResult: 0
 
-    //
     Mux16(a=y, b=false, sel=zy, out=zyResult);
-    // => y: 1111111111
-    // => zy: 1
-    // => zyResult: 0 (false)
-
     Not16(in=zyResult, out=notY);
     Mux16(a=zyResult, b=notY, sel=ny, out=nyResult);
+
+    Add16(a=nxResult, b=nyResult, out=addXY);
+    And16(a=nxResult, b=nyResult, out=andXY);
+    Mux16(a=andXY, b=addXY, sel=f, out=fResult);
+
+    Not16(in=fResult, out=notOut);
+    Mux16(a=fResult, b=notOut, sel=no, out=out, out[0..7]=noResultPart1, out[8..15]=noResultPart2, out[15]=isOutNegative);
+
+    Or8Way(in=noResultPart1, out=or8WayResult1);
+    Or8Way(in=noResultPart2, out=or8WayResult2);
+    Or(a=or8WayResult1, b=or8WayResult2, out=isOutZero);
+    Mux(a=true, b=false, sel=isOutZero, out=zr);
+
+    Mux(a=false, b=true, sel=isOutNegative, out=ng);
 }
