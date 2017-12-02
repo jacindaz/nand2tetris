@@ -14,5 +14,17 @@ CHIP Bit {
     OUT out;
 
     PARTS:
-    // Put your code here:
+    // can be built from a DFF and a multiplexor
+
+    // if load[t] == 1
+    //      then out[t+1] = in[t]
+    //      output for t + 1 is the current input
+    // else (no change)
+    //      out[t+1] = out[t]
+    //      output for t + 1 is the current output
+
+
+    Mux(a=previousOutput, b=in, sel=load, out=result);
+    DFF(in=result, out=previousOutput);
+    DFF(in=result, out=out);
 }
