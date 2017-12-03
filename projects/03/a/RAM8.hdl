@@ -29,9 +29,13 @@ CHIP RAM8 {
     // if load == 0
     //   out =
 
+    // Selects a RAM part
+    // (modifies load bit to help select which register to load)
     DMux8Way(in=load, sel=address, a=loada, b=loadb, c=loadc, d=loadd, e=loade, f=loadf, g=loadg, h=loadh);
 
+    // Selects a register within that RAM part
     // Only 1 of these will get set due to the load bit:
+    // actually load the register with the input
     Register(in=in, load=loada, out=regOut0);
     Register(in=in, load=loadb, out=regOut1);
     Register(in=in, load=loadc, out=regOut2);
@@ -41,6 +45,8 @@ CHIP RAM8 {
     Register(in=in, load=loadg, out=regOut6);
     Register(in=in, load=loadh, out=regOut7);
 
+    // Output whatever result was loaded into
+    // whichever register your address specified
     Mux8Way16(a=regOut0, b=regOut1, c=regOut2, d=regOut3, e=regOut4, f=regOut5, g=regOut6, h=regOut7, sel=address, out=out, out=result);
-
 }
+
