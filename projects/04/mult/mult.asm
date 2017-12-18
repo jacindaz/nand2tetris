@@ -19,6 +19,10 @@ D;JEQ
 
 @i
 M=0
+
+@R2
+M=0
+
 (LOOP)
   // grab the value that's in register 0 (@RO)
   // looks like @i is initialized as 0
