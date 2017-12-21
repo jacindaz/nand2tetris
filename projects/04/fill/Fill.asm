@@ -14,15 +14,38 @@
   // this bit is to store @SCREEN's address into register 16
   @KBD
   D=A
-  @addr
+  @keyboardAddr // register 16
   M=D
 
   // try to store the value of RAM[24576] into
   // @keyboardValue (register 17)
-  @KBD
+  @KBD // register 24576
   D=M
-  @keyboardValue
+  @keyboardValue // register 17
   M=D
 
-  @LOOP
+  @CLEARSCREEN
+  D;JEQ
+
+  // need to jump
+  // if @keyboardValue is something other than 0
+  @FILLSCREEN // line 10
+  // why can't you do M;JGT ???
+  // syntax highlighting doesn't work for that
+  D;JGT
+
+(FILLSCREEN)
+  // how to write a few pixels here ???
+  @SCREEN
+  D=A
+  @screenAddr
+  M=D
+
+  @screenAddr
+  A=M
+  M=-1
+
+(CLEARSCREEN)
+  // change this later to turn all pixels to 0
+  @CLEARSCREEN
   0;JMP
