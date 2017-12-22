@@ -16,36 +16,12 @@ CHIP PC {
     OUT out[16];
 
     PARTS:
-    // out[t + 1] = 0 if reset[t] == 1
-    // Register(in=false, load=reset, out=resetOutToPrint);
-    Register(in=false, load=reset, out=resetOut);
 
-    // out[t + 1] = in[t] if load[t] == 1
-    // Register(in=in, load=load, out=loadOutToPrint);
-    Register(in=in, load=load, out=loadOut);
-
-    // out[t+ 1] = out[t] + 1 if inc[t] == 1
-    // Inc16(in=previousOutput, out=inc16Out);
-    // Register(in=inc16Out, load=inc, out=incOut);
-
-    // how to select resetOut, loadOut, or incOut as the result ??
-    // Mux8Way16(a=, b=, ...h=, sel=, out=);
-    // wait but how to combine the reset, load, inc bits into 1 ??
-
+    Inc16(in=previousOut, out=incOut);
     Mux8Way16(
-        a=true, b=true, c=loadOut, d=loadOut, e=resetOut, f=resetOut, g=resetOut, h=resetOut,
-        sel[0]=reset, sel[1]=load, sel[2]=inc, out=out
+        a=previousOut, b=incOut, c=in, d=in, e=false, f=false, g=false, h=false,
+        sel[0]=reset, sel[1]=load, sel[2]=inc, out=result
     );
 
-
-    // how to get currentOutput ???
-    // Register(in=resetLoadOrIncOut, load=, out=);
-    //
-    // START HERE
-    // in is 1 bit, and resetLoadOrIncOut is 16 ????
-    // DFF(in=resetLoadOrIncOut, out=previousOutput);
-    // DFF(in=resetLoadOrIncOut, out=out);
-
-
-
+    Register(in=result, load=true, out=previousOut, out=out);
 }
