@@ -5,12 +5,15 @@
 // When no key is pressed, the program clears the screen, i.e. writes
 // "white" in every pixel;
 // the screen should remain fully clear as long as no key is pressed.
-//
-// Tips for keyboard listener homework problem:
-// * use a loop with pointers to continuously listen for any keyboard input
-// * need to fill every pixel (all memory addresses) with black or white
 
 (LOOP)
+  // reset register 17 back to 0
+  // for the next iteration of pressing a key
+  M=0
+  D=M
+  @keyboardValue
+  M=D
+
   // this bit is to store @SCREEN's address into register 16
   @KBD
   D=A
@@ -27,15 +30,15 @@
   @CLEARSCREEN
   D;JEQ
 
-  // need to jump
-  // if @keyboardValue is something other than 0
   @FILLSCREEN // line 10
   // why can't you do M;JGT ???
   // syntax highlighting doesn't work for that
   D;JGT
 
+  @LOOP
+  0;JMP
+
 (FILLSCREEN)
-  // how to write a few pixels here ???
   @SCREEN
   D=A
   @screenAddr
@@ -45,7 +48,18 @@
   A=M
   M=-1
 
+  @LOOP
+  0;JMP
+
 (CLEARSCREEN)
-  // change this later to turn all pixels to 0
-  @CLEARSCREEN
+  @SCREEN
+  D=A
+  @screenAddr
+  M=D
+
+  @screenAddr
+  A=M
+  M=0
+
+  @LOOP
   0;JMP
