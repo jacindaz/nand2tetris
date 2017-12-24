@@ -7,23 +7,15 @@
 // the screen should remain fully clear as long as no key is pressed.
 
 (LOOP)
-  // reset values in register 16 and 17
+  // reset values in register 16
   @16
   M=0
-  @17
-  M=0
-
-  // this bit is to store @SCREEN's address into register 16
-  @KBD
-  D=A
-  @keyboardAddr // register 16
-  M=D
 
   // try to store the value of RAM[24576] into
-  // @keyboardValue (register 17)
+  // @keyboardValue (register 16)
   @KBD // register 24576
   D=M
-  @keyboardValue // register 17
+  @keyboardValue // register 16
   M=D
 
   @SCREEN
