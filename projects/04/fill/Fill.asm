@@ -10,6 +10,10 @@
   // reset values in register 16
   @16
   M=0
+  @17
+  M=0
+  @18
+  M=0
 
   // try to store the value of RAM[24576] into
   // @keyboardValue (register 16)
@@ -44,6 +48,19 @@
   A=M
   M=-1 // RAM[16384]=-1
 
+  @KBD // get the keyboard base address, save into D
+  D=A
+  @keyboardMax
+  M=D // D is keyboard base address
+  @screenAddr
+  D=M
+  @keyboardMax // @keyboardMax is 24576
+  M=D-M
+  D=M
+
+  @LOOP
+  D;JGE
+
   // jump when the currently selected register's value
   // is not zero !!!
   // if i don't specify a jump, will it fill in
@@ -68,4 +85,8 @@
   M=0
 
   @LOOP
+  0;JMP
+
+(END)
+  @END
   0;JMP
