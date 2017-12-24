@@ -7,12 +7,11 @@
 // the screen should remain fully clear as long as no key is pressed.
 
 (LOOP)
-  // reset register 17 back to 0
-  // for the next iteration of pressing a key
+  // reset values in register 16 and 17
+  @16
   M=0
-  D=M
-  @keyboardValue
-  M=D
+  @17
+  M=0
 
   // this bit is to store @SCREEN's address into register 16
   @KBD
@@ -27,6 +26,11 @@
   @keyboardValue // register 17
   M=D
 
+  @SCREEN
+  D=A
+  @screenAddr
+  M=D
+
   @CLEARSCREEN
   D;JEQ
 
@@ -39,16 +43,26 @@
   0;JMP
 
 (FILLSCREEN)
-  @SCREEN
-  D=A
-  @screenAddr
-  M=D
+  // how do i find the max memory address ???
+  // or do i just keep filling until i can't anymore ???
+  // also, how do i know that i'm "done" filling
+  // the screen ??? (until all registers have value 1???)
 
   @screenAddr
   A=M
-  M=-1
+  M=-1 // RAM[16384]=-1
 
-  @LOOP
+  // jump when the currently selected register's value
+  // is not zero !!!
+  // if i don't specify a jump, will it fill in
+  // black pixels forever ???
+  // max address is: 24576
+  @32
+  D=A
+  @screenAddr
+  M=M+D
+
+  @FILLSCREEN
   0;JMP
 
 (CLEARSCREEN)
