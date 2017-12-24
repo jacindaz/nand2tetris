@@ -10,8 +10,8 @@
   // reset values in register 16
   @16
   M=0
-  @17
-  M=0
+  // @17
+  // M=0
   @18
   M=0
 
@@ -43,32 +43,25 @@
   A=M
   M=-1 // RAM[16384]=-1
 
-  @KBD // get the keyboard base address, save into D
-  D=A
-  @keyboardMax
-  M=D // D is keyboard base address
-  @screenAddr
-  D=M
-  @keyboardMax // @keyboardMax is 24576
-  M=D-M
-  D=M
-
-  @LOOP
-  D;JGE
-
   @32
   D=A
   @screenAddr
   M=M+D
 
-  @FILLSCREEN
+  @LOOP
   0;JMP
 
 (CLEARSCREEN)
-  @SCREEN
+  // jump if @screenAddr is already 0
+  @screenAddr
+  D=M
+  @LOOP
+  D;JEQ
+
+  @32
   D=A
   @screenAddr
-  M=D
+  M=M-D
 
   @screenAddr
   A=M
