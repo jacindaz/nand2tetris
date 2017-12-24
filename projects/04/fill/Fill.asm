@@ -22,28 +22,23 @@
   @keyboardValue // register 16
   M=D
 
+  @CLEARSCREEN
+  D;JEQ
+
+  // store the keyboard base address
+  // to increment later when iterating
   @SCREEN
   D=A
   @screenAddr
   M=D
 
-  @CLEARSCREEN
-  D;JEQ
-
-  @FILLSCREEN // line 10
-  // why can't you do M;JGT ???
-  // syntax highlighting doesn't work for that
+  @FILLSCREEN
   D;JGT
 
   @LOOP
   0;JMP
 
 (FILLSCREEN)
-  // how do i find the max memory address ???
-  // or do i just keep filling until i can't anymore ???
-  // also, how do i know that i'm "done" filling
-  // the screen ??? (until all registers have value 1???)
-
   @screenAddr
   A=M
   M=-1 // RAM[16384]=-1
@@ -61,11 +56,6 @@
   @LOOP
   D;JGE
 
-  // jump when the currently selected register's value
-  // is not zero !!!
-  // if i don't specify a jump, will it fill in
-  // black pixels forever ???
-  // max address is: 24576
   @32
   D=A
   @screenAddr
@@ -85,8 +75,4 @@
   M=0
 
   @LOOP
-  0;JMP
-
-(END)
-  @END
   0;JMP
