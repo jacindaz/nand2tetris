@@ -37,7 +37,7 @@
   A=M
   M=-1 // RAM[16384]=-1
 
-  @32
+  @1
   D=A
   @screenAddr
   M=M+D
@@ -65,7 +65,7 @@
   @LOOP
   D;JEQ
 
-  @32
+  @1
   D=A
   @screenAddr
   M=M-D
