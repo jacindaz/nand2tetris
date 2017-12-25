@@ -42,7 +42,20 @@
   @screenAddr
   M=M+D
 
+  @KBD // get the keyboard base address, save into D
+  D=A
+  @keyboardMax
+  M=D // D is keyboard base address
+  @screenAddr
+  D=M
+  @keyboardMax // @keyboardMax is 24576
+  M=D-M
+  D=M
+
   @LOOP
+  D;JGE
+
+  @FILLSCREEN
   0;JMP
 
 (CLEARSCREEN)
@@ -57,9 +70,22 @@
   @screenAddr
   M=M-D
 
+  @KBD // get the keyboard base address, save into D
+  D=A
+  @keyboardMax
+  M=D // D is keyboard base address
+  @screenAddr
+  D=M
+  @keyboardMax // @keyboardMax is 24576
+  M=D-M
+  D=M
+
+  @LOOP
+  D;JGE
+
   @screenAddr
   A=M
   M=0
 
-  @LOOP
+  @CLEARSCREEN
   0;JMP
