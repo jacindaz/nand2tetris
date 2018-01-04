@@ -5,20 +5,20 @@
 
 /**
  * The complete address space of the Hack computer's memory,
- * including RAM and memory-mapped I/O. 
+ * including RAM and memory-mapped I/O.
  * The chip facilitates read and write operations, as follows:
  *     Read:  out(t) = Memory[address(t)](t)
  *     Write: if load(t-1) then Memory[address(t-1)](t) = in(t-1)
- * In words: the chip always outputs the value stored at the memory 
- * location specified by address. If load==1, the in value is loaded 
- * into the memory location specified by address. This value becomes 
+ * In words: the chip always outputs the value stored at the memory
+ * location specified by address. If load==1, the in value is loaded
+ * into the memory location specified by address. This value becomes
  * available through the out output from the next time step onward.
  * Address space rules:
- * Only the upper 16K+8K+1 words of the Memory chip are used. 
- * Access to address>0x6000 is invalid. Access to any address in 
- * the range 0x4000-0x5FFF results in accessing the screen memory 
- * map. Access to address 0x6000 results in accessing the keyboard 
- * memory map. The behavior in these addresses is described in the 
+ * Only the upper 16K+8K+1 words of the Memory chip are used.
+ * Access to address>0x6000 is invalid. Access to any address in
+ * the range 0x4000-0x5FFF results in accessing the screen memory
+ * map. Access to address 0x6000 results in accessing the keyboard
+ * memory map. The behavior in these addresses is described in the
  * Screen and Keyboard chip specifications given in the book.
  */
 
@@ -28,4 +28,43 @@ CHIP Memory {
 
     PARTS:
     // Put your code here:
+
+    // Memory: This chip includes three chip-parts: RAM16K, Screen, and Keyboard.
+    // The Screen and the Keyboard are available as built-in chips,
+    // and thus there is no need to implement them. Although the
+    // RAM16K chip was built in Project 3, we recommend using its
+    // built-in version, as it provides a debugging-friendly GUI.
+
+    // load from the keyboard ? or screen ?
+    Screen(in=in, load=load, address[0..12]=address[0..12], out=out);
+    // RAM16K(in=in, load=load, address=, out=);
+
+    // Keyboard(out=out);
+
+    // I am so confused - figure out how to break down problem!!
 }
+
+/*
+
+CHIP RAM16K {
+    IN in[16], load, address[14];
+    OUT out[16];
+}
+
+
+CHIP Screen {
+    IN  in[16],    // what to write
+    load,          // write-enable bit
+    address[13];   // where to read/write
+    OUT out[16];   // Screen value at the given address
+
+    CLOCKED in, load;
+}
+
+CHIP Keyboard {
+    OUT out[16];   // The ASCII code of the pressed key,
+                   // or 0 if no key is currently pressed,
+                   // or one the special codes listed in Figure 5.5.
+}
+
+*/
