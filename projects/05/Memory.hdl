@@ -35,13 +35,19 @@ CHIP Memory {
     // RAM16K chip was built in Project 3, we recommend using its
     // built-in version, as it provides a debugging-friendly GUI.
 
-    // load from the keyboard ? or screen ?
-    Screen(in=in, load=load, address[0..12]=address[0..12], out=out);
-    // RAM16K(in=in, load=load, address=, out=);
+    // IF load == 1, then:
+    //   - address 0-16,383 => assign to RAM memory space
+    //   - address 16,384-24,575 => assign to screen memory space
+    //   - address 24,576 => assign to keyboard memory space
 
-    // Keyboard(out=out);
+    RAM16K(in=in, load=load, address=address[0..13], out=ramOut);
 
-    // I am so confused - figure out how to break down problem!!
+    //Screen(in=in, load=load, address[0..12]=address[0..12], out=out);
+
+    // Keyboard(out=keyboardOut);
+
+    // Mux4Way16(a=readOut, b=ramOut, c=screenOut, d=keyboardOut, sel=, out=muxOut);
+
 }
 
 /*
@@ -50,7 +56,6 @@ CHIP RAM16K {
     IN in[16], load, address[14];
     OUT out[16];
 }
-
 
 CHIP Screen {
     IN  in[16],    // what to write
