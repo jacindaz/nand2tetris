@@ -27,8 +27,6 @@ CHIP Memory {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
-
     // Memory: This chip includes three chip-parts: RAM16K, Screen, and Keyboard.
     // The Screen and the Keyboard are available as built-in chips,
     // and thus there is no need to implement them. Although the
@@ -40,23 +38,15 @@ CHIP Memory {
     //   - address 16,384-24,575 => assign to screen memory space
     //   - address 24,576 => assign to keyboard memory space
 
-    RAM16K(in=in, load=load, address=address[0..13], out=ramOut);
-
-    //Screen(in=in, load=load, address[0..12]=address[0..12], out=out);
-
-    // Keyboard(out=keyboardOut);
-
-    // Mux4Way16(a=readOut, b=ramOut, c=screenOut, d=keyboardOut, sel=, out=muxOut);
-
+    DMux4Way(in=load, sel=address[13..14], a=loadram1, b=loadram2, c=loadscreen, d=loadkbd);
+    Or(a=loadram1, b=loadram2, out=loadram);
+    RAM16K(in=in, load=loadram, address=address[0..13], out=ramout);
+    Screen(in=in, load=loadscreen, address=address[0..12], out=scrout);
+    Keyboard(out=kbout);
+    Mux4Way16(a=ramout, b=ramout, c=scrout, d=kbout, sel=address[13..14], out=out);
 }
 
 /*
-
-CHIP RAM16K {
-    IN in[16], load, address[14];
-    OUT out[16];
-}
-
 CHIP Screen {
     IN  in[16],    // what to write
     load,          // write-enable bit
@@ -65,11 +55,4 @@ CHIP Screen {
 
     CLOCKED in, load;
 }
-
-CHIP Keyboard {
-    OUT out[16];   // The ASCII code of the pressed key,
-                   // or 0 if no key is currently pressed,
-                   // or one the special codes listed in Figure 5.5.
-}
-
 */
