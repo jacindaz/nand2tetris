@@ -39,7 +39,11 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
+    PC(in=instruction, load=reset, inc=, reset=, out[0..14]=pc)
+
     Mux16(a=inM, b=false, sel=reset, out=outM);
+    DRegister(in=instruction, load=reset, out=dRegOut);
+    ARegister(in=instruction, load=reset, out[0..14]=addressM);
 }
 
 
